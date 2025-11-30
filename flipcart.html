@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopEase - E-Commerce</title>
+
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+    body{background:#f3f6fa;color:#222;}
+
+    /* Header */
+    header{
+        background:linear-gradient(135deg,#a00a64,#004ed4);
+        color:#fff;
+        padding:18px 25px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        position:sticky;top:0;z-index:10;
+    }
+    nav a{
+        color:#fff;
+        text-decoration:none;
+        margin:0 12px;
+        font-weight:600;
+        transition:0.3s;
+        padding:6px 10px;
+        border-radius:6px;
+    }
+    nav a:hover{
+        background:#fff;
+        color:#007bff;
+    }
+
+    /* Section Design */
+    section{
+        padding:60px 7%;
+        display:none;
+    }
+    #home{display:block;}
+    h1{text-align:center;margin-bottom:25px;font-size:32px;color:#333;}
+
+    /* Banner */
+    .home-banner{
+        background:url('https://www.99techpost.com/wp-content/uploads/2023/08/E-commerce-Website-scaled.jpg') center/cover;
+        height:350px;border-radius:15px;
+        box-shadow:0 0 20px rgba(0,0,0,0.2);
+    }
+    .home-text{
+        text-align:center;
+        margin-top:20px;
+        font-size:20px;
+        font-weight:500;
+    }
+
+    /* Product Cards */
+    .products-container{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+        gap:25px;
+    }
+    .product{
+        background: #e9bbbb;
+        border-radius:15px;
+        padding:15px;
+        text-align:center;
+        box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        transition:0.3s;
+    }
+    .product:hover{
+        transform:translateY(-8px);
+        box-shadow:0 8px 18px rgba(0,0,0,0.18);
+    }
+    .product img{
+        width:100%;
+        height:200px;
+        border-radius:12px;
+        object-fit:cover;
+        margin-bottom:10px;
+    }
+    button{
+        background:#007bff;
+        border:none;
+        color:#fff;
+        padding:10px 15px;
+        border-radius:8px;
+        cursor:pointer;
+        font-size:14px;
+        transition:0.3s;
+    }
+    button:hover{
+        background:#0056b3;
+    }
+
+    /* Cart */
+    .cart-item{
+        background:#fff;
+        padding:15px;
+        border-radius:12px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.08);
+        margin-bottom:12px;
+    }
+
+    /* Checkout */
+    form input, form textarea{
+        width:100%;
+        padding:12px;
+        margin:12px 0;
+        border-radius:10px;
+        border:2px solid #007bff;
+        outline:none;
+        transition:0.3s;
+    }
+    form input:focus, form textarea:focus{
+        border-color:#0056b3;
+    }
+
+    /* Footer */
+    footer{
+        background:#007bff;
+        color:#fff;
+        text-align:center;
+        padding:12px;
+        font-size:14px;
+        margin-top:50px;
+    }
+
+    @media(max-width:650px){
+        nav a{margin:0 5px;font-size:14px;}
+        h1{font-size:26px;}
+    }
+</style>
+
+</head>
+<body>
+
+<header>
+    <div class="logo"><b>ShopEase</b></div>
+    <nav>
+        <a onclick="show('home')">Home</a>
+        <a onclick="show('products')">Products</a>
+        <a onclick="show('cart')">Cart (<span id="cartCount">0</span>)</a>
+        <a onclick="show('about')">About</a>
+        <a onclick="show('contact')">Contact</a>
+    </nav>
+</header>
+
+<!-- Home -->
+<section id="home">
+    <div class="home-banner"></div>
+    <div class="home-text">Best Deals • Fast Delivery • Trusted Shopping 🛍</div>
+</section>
+
+<!-- Products -->
+<section id="products">
+    <h1>Featured Products</h1>
+    <div class="products-container" id="productList"></div>
+</section>
+
+<!-- Cart -->
+<section id="cart">
+    <h1>Your Cart</h1>
+    <div id="cartItems"></div>
+    <h2 style="margin-top:20px;">Total: ₹<span id="totalAmount">0</span></h2>
+    <button onclick="showCheckout()">Proceed to Checkout</button>
+</section>
+
+<!-- Checkout -->
+<section id="checkout">
+    <h1>Complete Your Order</h1>
+    <form onsubmit="placeOrder(event)">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="mobile" placeholder="Phone Number" required>
+        <textarea id="address" placeholder="Delivery Address" required></textarea>
+        <button type="submit" style="width:100%;">Place Order</button>
+    </form>
+</section>
+
+<!-- Order Success -->
+<section id="orderSuccess" style="text-align:center;">
+    <h1>🎉 Order Successful!</h1>
+    <p>Your order has been confirmed. Thank you! 😊</p>
+    <button onclick="show('home')">Back to Home</button>
+</section>
+
+<!-- About -->
+<section id="about">
+    <h1>About ShopEase</h1>
+    <p style="text-align:center;font-size:18px;">
+        ShopEase is your trusted online shopping partner — Best prices & Best Quality!
+    </p>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+    <h1>Contact Us</h1>
+    <p style="text-align:center;font-size:18px;">
+        📧 Email: support@shopease.com <br>
+        ☎ Phone: +91 98765-43210
+    </p>
+</section>
+
+<footer>
+    © 2025 ShopEase • All Rights Reserved
+</footer>
+
+<script>
+// Navigation
+function show(page){
+    document.querySelectorAll("section").forEach(s=>s.style.display="none");
+    document.getElementById(page).style.display="block";
+}
+
+// Products Data
+const products=[
+//  {id:1,name:"Nike Shoes",price:1499,img:"https://source.unsplash.com/400x400/?nike,shoes"},
+//  {id:2,name:"Smart Watch",price:1999,img:"https://source.unsplash.com/400x400/?smartwatch"},
+//  {id:3,name:"Laptop",price:45999,img:"https://source.unsplash.com/400x400/?laptop"},
+//  {id:4,name:"Bluetooth Headphones",price:899,img:"https://source.unsplash.com/400x400/?headphones"}
+
+// {id:1,name:"Smartphone X",price:15999,img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=800&auto=format&fit=crop"},
+//   {id:2,name:"Wireless Headphones",price:2999,img:"https://images.unsplash.com/photo-1518444020304-c3c3ec2c6f5b?q=80&w=800&auto=format&fit=crop"},
+//   {id:3,name:"Smartwatch Pro",price:4999,img:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=800&auto=format&fit=crop"},
+//   {id:4,name:"Laptop Air",price:55999,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop"},
+//   {id:5,name:"Bluetooth Speaker",price:1999,img:"https://images.unsplash.com/photo-1585386959984-a415522c7b7a?q=80&w=800&auto=format&fit=crop"},
+//   {id:6,name:"DSLR Camera",price:44999,img:"https://images.unsplash.com/photo-1519183071298-a2962beadea8?q=80&w=800&auto=format&fit=crop"},
+//   {id:7,name:"Wireless Mouse",price:999,img:"https://images.unsplash.com/photo-1593642532973-d31b6557fa68?q=80&w=800&auto=format&fit=crop"},
+//   {id:8,name:"Lan Cable",price:400,img:"https://images.unsplash.com/photo-1612831455545-0a1b5e4b3c5b?q=80&w=800&auto=format&fit=crop"}
+{id:4,name:"Laptop Air",price:55999,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop"},
+{name:"Smartphone X",price:15999,img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"},
+  {name:"Wireless Headphones",price:2999,img:"https://www.bhphotovideo.com/images/images2500x2500/logitech_981_000882_g733_lightspeed_wireless_rgb_1590052.jpg"},
+  {name:"Smartwatch Pro",price:4999,img:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
+  {name:"Laptop Air",price:55999,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
+  {name:"Bluetooth Speaker",price:1999,img:"https://m.media-amazon.com/images/I/81wdmgabXFL.AC.jpg"},
+  {name:"DSLR Camera",price:44999,img:"https://www.bhphotovideo.com/images/fb/nikon_d7500_dslr_camera_with_1333200.jpg"},
+  {name:"Wireless Mouse",price:1999,img:"https://mytarget.my/wp-content/uploads/2021/01/LOGITECH-WIRELESS-MOUSE-M185-BLUE-2048x2048.jpg"},
+  {name:"Lan Cable",price:400,img:"https://m.media-amazon.com/images/I/61dP16fYzWL.AC_SL1500.jpg"}
+];
+
+// Display Products
+let list=document.getElementById("productList");
+products.forEach(p=>{
+ list.innerHTML+=`
+ <div class="product">
+    <img src="${p.img}">
+    <h3>${p.name}</h3>
+    <p><b>₹${p.price}</b></p>
+    <button onclick="addToCart(${p.id})">Add to Cart</button>
+ </div>`;
+});
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+updateCart();
+
+// Add to Cart
+function addToCart(id){
+ let item=products.find(p=>p.id===id);
+ cart.push(item);
+ localStorage.setItem("cart", JSON.stringify(cart));
+ updateCart();
+ alert("Product Added to Cart!");
+}
+
+// Update Cart UI
+function updateCart(){
+ document.getElementById("cartCount").innerText=cart.length;
+ let div=document.getElementById("cartItems");
+ div.innerHTML="";
+ let total=0;
+ cart.forEach((item,i)=>{
+  total+=item.price;
+  div.innerHTML+=`
+  <div class="cart-item">
+    ${item.name} — ₹${item.price}
+    <button onclick="removeItem(${i})">❌</button>
+  </div>`;
+ });
+ document.getElementById("totalAmount").innerText=total;
+}
+
+function removeItem(i){
+ cart.splice(i,1);
+ localStorage.setItem("cart", JSON.stringify(cart));
+ updateCart();
+}
+
+// Checkout
+function showCheckout(){
+ if(cart.length===0){
+  alert("⚠ Cart is Empty!");
+  return;
+ }
+ show("checkout");
+}
+
+// Order Place
+function placeOrder(e){
+ e.preventDefault();
+ cart=[];
+ localStorage.removeItem("cart");
+ updateCart();
+ show("orderSuccess");
+}
+</script>
+
+</body>
+</html>
